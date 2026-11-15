@@ -1,5 +1,3 @@
-# WallHub1
-Сайт с обоям
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -1183,4 +1181,3 @@ updateAccount();
 
 </body>
 </html>
-
