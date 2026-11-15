@@ -1,223 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WallHub — Обои</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#090912;color:white;font-family:Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#090912;color:white;font-family:Arial,sans-serif}
 header{padding:20px 5%;background:#11111d;border-bottom:1px solid #29213f;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px}
-.logo{font-size:29px;font-weight:bold;color:#a875ff;text-shadow:0 0 15px #873dff}
-nav{display:flex;gap:10px;flex-wrap:wrap}
-button{cursor:pointer;border:0;color:white;background:#27213a;padding:11px 16px;border-radius:9px;transition:.2s}
-button:hover{background:#793be0}
-button:disabled{opacity:.55;cursor:wait}
-main{max-width:1450px;margin:auto;padding:25px}
-.hero{padding:45px 20px;text-align:center;border-radius:20px;background:linear-gradient(120deg,#21113d,#101b36);margin-bottom:25px}
-.hero h1{font-size:38px;color:#c29aff;margin:0 0 12px}
-.hero p{color:#bbb}
-.search{width:100%;padding:15px;margin:20px 0;border-radius:10px;border:1px solid #49336e;background:#171525;color:white;font-size:16px}
-.section{margin:35px 0}
-.section h2{color:#bd91ff;font-size:25px;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
-.wall{background:#171525;border:1px solid #302744;border-radius:14px;overflow:hidden;transition:.25s}
-.wall:hover{transform:translateY(-5px);border-color:#9b55ff;box-shadow:0 0 20px #873dff44}
-.wall img{width:100%;height:190px;object-fit:cover;display:block;cursor:pointer}
-.wall-info{padding:13px}
-.wall-info h3{margin:0 0 8px}
-.wall-info small{color:#ad82ff}
-.wall-actions{display:flex;gap:7px;margin-top:12px}
-.wall-actions button{flex:1;padding:9px 5px}
-.category-list{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.category.active{background:#853fff}
+.logo{font-size:29px;font-weight:bold;color:#a875ff;text-shadow:0 0 15px #873dff}nav{display:flex;gap:10px;flex-wrap:wrap}
+button{cursor:pointer;border:0;color:white;background:#27213a;padding:11px 16px;border-radius:9px;transition:.2s}button:hover{background:#793be0}button:disabled{opacity:.55;cursor:wait}
+main{max-width:1450px;margin:auto;padding:25px}.hero{padding:45px 20px;text-align:center;border-radius:20px;background:linear-gradient(120deg,#21113d,#101b36);margin-bottom:25px}
+.hero h1{font-size:38px;color:#c29aff;margin:0 0 12px}.hero p{color:#bbb}.search{width:100%;padding:15px;margin:20px 0;border-radius:10px;border:1px solid #49336e;background:#171525;color:white;font-size:16px}
+.section{margin:35px 0}.section h2{color:#bd91ff;font-size:25px;margin-bottom:18px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.wall{background:#171525;border:1px solid #302744;border-radius:14px;overflow:hidden;transition:.25s}.wall:hover{transform:translateY(-5px);border-color:#9b55ff;box-shadow:0 0 20px #873dff44}
+.wall img{width:100%;height:190px;object-fit:cover;display:block;cursor:pointer}.wall-info{padding:13px}.wall-info h3{margin:0 0 8px}.wall-info small{color:#ad82ff}
+.wall-actions{display:flex;gap:7px;margin-top:12px}.wall-actions button{flex:1;padding:9px 5px}.category-list{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.category.active{background:#853fff}
 .ad{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;text-decoration:none;color:white;min-height:170px;padding:25px;margin:30px 0;border:2px dashed #914dff;border-radius:18px;background:linear-gradient(135deg,#151020,#24143c);box-shadow:0 0 20px #843dff22;transition:.2s}
-.ad:hover{border-color:#00eaff;box-shadow:0 0 25px #00eaff44;transform:scale(1.01)}
-.ad strong{font-size:23px;color:#c29aff}
-.ad p{color:#aaa}
-.side-ad{position:fixed;right:12px;top:230px;width:160px;min-height:320px;z-index:5}
-.side-ad strong{font-size:17px}
-.panel{background:#171525;border:1px solid #49336e;padding:20px;border-radius:14px;margin:20px 0}
-.panel input,.panel select{margin:7px 0 14px}
+.ad:hover{border-color:#00eaff;box-shadow:0 0 25px #00eaff44;transform:scale(1.01)}.ad strong{font-size:23px;color:#c29aff}.ad p{color:#aaa}
+.side-ad{position:fixed;right:12px;top:230px;width:160px;min-height:320px;z-index:5}.side-ad strong{font-size:17px}
+.panel{background:#171525;border:1px solid #49336e;padding:20px;border-radius:14px;margin:20px 0}.panel input,.panel select{margin:7px 0 14px}
 input,select{background:#171525;color:white;border:1px solid #49336e;padding:12px;border-radius:8px;width:100%}
-.auth-container{display:flex;justify-content:center;padding:35px 10px}
-.auth-card{width:100%;max-width:450px;padding:35px;border-radius:22px;background:linear-gradient(145deg,#171525,#211532);border:1px solid #7744bd;box-shadow:0 0 35px #813cff33}
-.auth-logo{color:#b78aff;font-size:28px;font-weight:bold;text-align:center;text-shadow:0 0 15px #9c55ff}
-.auth-card h2{text-align:center;margin-bottom:8px}
-.auth-subtitle{color:#999;text-align:center;margin-bottom:28px}
-.auth-card label{display:block;margin:15px 0 8px;color:#c7b4e9}
-.auth-card input{width:100%;padding:14px;background:#0d0c17;border:1px solid #49336e;border-radius:10px;color:white}
-.password-box{display:flex;gap:7px}
-.password-box input{min-width:0}
-.password-box button{white-space:nowrap}
+.auth-container{display:flex;justify-content:center;padding:35px 10px}.auth-card{width:100%;max-width:450px;padding:35px;border-radius:22px;background:linear-gradient(145deg,#171525,#211532);border:1px solid #7744bd;box-shadow:0 0 35px #813cff33}
+.auth-logo{color:#b78aff;font-size:28px;font-weight:bold;text-align:center;text-shadow:0 0 15px #9c55ff}.auth-card h2{text-align:center;margin-bottom:8px}.auth-subtitle{color:#999;text-align:center;margin-bottom:28px}
+.auth-card label{display:block;margin:15px 0 8px;color:#c7b4e9}.auth-card input{width:100%;padding:14px;background:#0d0c17;border:1px solid #49336e;border-radius:10px;color:white}
+.password-box{display:flex;gap:7px}.password-box input{min-width:0}.password-box button{white-space:nowrap}
 .auth-main-btn{width:100%;margin-top:15px;padding:14px;background:linear-gradient(90deg,#7438d5,#a34bff);font-size:16px;font-weight:bold}
-.auth-switch{text-align:center;color:#aaa;margin-top:22px}
-.auth-switch button{color:#bd91ff;background:transparent;padding:5px}
-#authMessage{color:#ff8585;font-size:13px;min-height:18px;line-height:1.5}
-#authMessage.success{color:#70e6a1}
-.password-strength{height:5px;border-radius:5px;background:#333;margin-top:9px;overflow:hidden}
-.password-strength div{height:100%;width:0;transition:.3s;background:#a34bff}
-.strength-text{color:#999;font-size:12px;margin-top:6px}
-.user-avatar{width:80px;height:80px;display:grid;place-items:center;margin:20px auto;border-radius:50%;background:#39215c;border:2px solid #a875ff;font-size:38px}
-.user-status{color:#70e6a1;text-align:center}
-.modal{position:fixed;inset:0;background:#000e;z-index:20;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-box{background:#171525;padding:20px;border-radius:15px;max-width:800px;width:100%;text-align:center}
-.modal img{max-width:100%;max-height:65vh;object-fit:contain}
-.hidden{display:none!important}
-footer{text-align:center;padding:35px;color:#777;border-top:1px solid #29213f}
-@media(max-width:1200px){.side-ad{display:none}}
-@media(max-width:600px){main{padding:14px}.hero h1{font-size:27px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.wall img{height:140px}header{padding:15px}.auth-card{padding:23px}}
+.auth-switch{text-align:center;color:#aaa;margin-top:22px}.auth-switch button{color:#bd91ff;background:transparent;padding:5px}
+#authMessage{color:#ff8585;font-size:13px;min-height:18px;line-height:1.5}#authMessage.success{color:#70e6a1}
+.password-strength{height:5px;border-radius:5px;background:#333;margin-top:9px;overflow:hidden}.password-strength div{height:100%;width:0;transition:.3s;background:#a34bff}
+.strength-text{color:#999;font-size:12px;margin-top:6px}.user-avatar{width:80px;height:80px;display:grid;place-items:center;margin:20px auto;border-radius:50%;background:#39215c;border:2px solid #a875ff;font-size:38px}
+.user-status{color:#70e6a1;text-align:center}.modal{position:fixed;inset:0;background:#000e;z-index:20;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:#171525;padding:20px;border-radius:15px;max-width:800px;width:100%;text-align:center}.modal img{max-width:100%;max-height:65vh;object-fit:contain}
+.hidden{display:none!important}footer{text-align:center;padding:35px;color:#777;border-top:1px solid #29213f}
+@media(max-width:1200px){.side-ad{display:none}}@media(max-width:600px){main{padding:14px}.hero h1{font-size:27px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.wall img{height:140px}header{padding:15px}.auth-card{padding:23px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">WALLHUB</div>
-  <nav>
-    <button onclick="showSection('home')">Главная</button>
-    <button onclick="showSection('favorites')">❤️ Избранное</button>
-    <button onclick="showSection('add')">➕ Добавить обои</button>
-    <button onclick="showSection('settings')">⚙ Настройки</button>
-    <button onclick="showSection('account')">👤 Аккаунт</button>
-  </nav>
-</header>
-
+<header><div class="logo">WALLHUB</div><nav>
+<button onclick="showSection('home')">Главная</button><button onclick="showSection('favorites')">❤️ Избранное</button>
+<button onclick="showSection('add')">➕ Добавить обои</button><button onclick="showSection('settings')">⚙ Настройки</button><button onclick="showSection('account')">👤 Аккаунт</button>
+</nav></header>
 <main>
 <div id="home">
-  <div class="hero">
-    <h1>WALLHUB</h1>
-    <p>Найди идеальные обои для своего устройства</p>
-    <p>Игровые • Природа • Космос • 4K</p>
-  </div>
-  <input class="search" id="search" placeholder="🔍 Поиск обоев..." oninput="renderWalls()">
-  <section class="section"><h2>🔥 Популярное</h2><div class="grid" id="popularGrid"></div></section>
-  <a class="ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer">
-    <strong>📢 Место для вашей рекламы</strong><p>Нажми, чтобы перейти в наш Telegram-бот</p><small>Реклама</small>
-  </a>
-  <section class="section">
-    <h2>🖼️ Каталог обоев</h2>
-    <div class="category-list">
-      <button class="category active" onclick="setCategory('all',this)">Все</button>
-      <button class="category" onclick="setCategory('phone',this)">📱 Для телефона</button>
-      <button class="category" onclick="setCategory('pc',this)">💻 Для ПК</button>
-      <button class="category" onclick="setCategory('4k',this)">✨ 4K</button>
-      <button class="category" onclick="setCategory('anime',this)">🎌 Аниме</button>
-      <button class="category" onclick="setCategory('game',this)">🎮 Игры</button>
-    </div>
-    <div class="grid" id="wallGrid"></div>
-  </section>
-  <a class="ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer">
-    <strong>📢 Здесь может быть ваша реклама</strong><p>Разместите свой баннер на WallHub</p><small>Реклама</small>
-  </a>
+<div class="hero"><h1>WALLHUB</h1><p>Найди идеальные обои для своего устройства</p><p>Игровые • Природа • Космос • 4K</p></div>
+<input class="search" id="search" placeholder="🔍 Поиск обоев..." oninput="renderWalls()">
+<section class="section"><h2>🔥 Популярное</h2><div class="grid" id="popularGrid"></div></section>
+<a class="ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer"><strong>📢 Место для вашей рекламы</strong><p>Нажми, чтобы перейти в наш Telegram-бот</p><small>Реклама</small></a>
+<section class="section"><h2>🖼️ Каталог обоев</h2><div class="category-list">
+<button class="category active" onclick="setCategory('all',this)">Все</button><button class="category" onclick="setCategory('phone',this)">📱 Для телефона</button>
+<button class="category" onclick="setCategory('pc',this)">💻 Для ПК</button><button class="category" onclick="setCategory('4k',this)">✨ 4K</button>
+<button class="category" onclick="setCategory('anime',this)">🎌 Аниме</button><button class="category" onclick="setCategory('game',this)">🎮 Игры</button>
+</div><div class="grid" id="wallGrid"></div></section>
+<a class="ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer"><strong>📢 Здесь может быть ваша реклама</strong><p>Разместите свой баннер на WallHub</p><small>Реклама</small></a>
 </div>
-
-<div id="favorites" class="hidden">
-  <section class="section"><h2>❤️ Избранные обои</h2><div class="grid" id="favoriteGrid"></div></section>
-</div>
-
-<div id="add" class="hidden">
-  <section class="panel">
-    <h2>➕ Добавить свои обои</h2>
-    <label>Название</label><input id="newTitle" placeholder="Название обоев">
-    <label>Категория</label>
-    <select id="newCategory">
-      <option value="phone">Для телефона</option><option value="pc">Для ПК</option>
-      <option value="4k">4K</option><option value="anime">Аниме</option><option value="game">Игры</option>
-    </select>
-    <label>Изображение</label><input type="file" id="newImage" accept="image/jpeg,image/png,image/webp,image/avif">
-    <button onclick="addWallpaper()">Добавить обои</button>
-    <p id="addMessage"></p>
-    <p>Для загрузки необходимо войти в аккаунт. Максимальный размер файла — 5 МБ.</p>
-  </section>
-</div>
-
-<div id="settings" class="hidden">
-  <section class="panel">
-    <h2>⚙ Настройки WallHub</h2>
-    <label>Стиль курсора</label>
-    <select id="cursorSelect" onchange="changeCursor(this.value)">
-      <option value="classic">Обычный</option><option value="neon">Неоновый</option>
-      <option value="purple">Фиолетовый</option><option value="fire">Огненный</option><option value="matrix">Матрица</option>
-    </select>
-  </section>
-</div>
-
-<div id="account" class="hidden">
-  <section class="auth-container">
-    <div class="auth-card">
-      <div class="auth-logo">WALLHUB</div>
-      <h2 id="authTitle">Создать аккаунт</h2>
-      <p class="auth-subtitle">Добро пожаловать в мир обоев!</p>
-      <div id="authForm">
-        <div id="credentialsFields">
-        <div id="usernameBox">
-          <label for="username">Имя пользователя</label>
-          <input id="username" placeholder="Придумай никнейм" maxlength="20" autocomplete="username">
-        </div>
-        <label for="email">Email</label>
-        <input id="email" type="email" placeholder="Твоя электронная почта" autocomplete="email">
-        <label for="password">Пароль</label>
-        <div class="password-box">
-          <input id="password" type="password" placeholder="Минимум 8 символов" autocomplete="new-password" oninput="checkPasswordStrength()">
-          <button type="button" onclick="togglePassword('password',this)">Показать</button>
-        </div>
-        <div id="strengthBox" class="password-strength"><div id="strengthBar"></div></div>
-        <div id="strengthText" class="strength-text">Надёжность пароля</div>
-        <div id="confirmBox">
-          <label for="confirmPassword">Повтори пароль</label>
-          <div class="password-box">
-            <input id="confirmPassword" type="password" placeholder="Повтори пароль" autocomplete="new-password">
-            <button type="button" onclick="togglePassword('confirmPassword',this)">Показать</button>
-          </div>
-        </div>
-        <p id="authMessage"></p>
-        </div>
-        <div id="otpBox" class="hidden">
-          <h3 style="text-align:center;color:#c29aff">Подтверждение Email</h3>
-          <p class="auth-subtitle">Мы отправили письмо с 6-значным кодом. Введи его ниже.</p>
-          <label for="emailCode">Код из письма</label>
-          <input id="emailCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Например, 123456">
-          <p id="otpMessage" style="color:#ff8585;font-size:13px;min-height:18px"></p>
-          <button type="button" class="auth-main-btn" onclick="verifyEmailCode()">Подтвердить код</button>
-          <button type="button" style="width:100%;margin-top:10px" onclick="resendEmailCode()">Отправить код ещё раз</button>
-        </div>
-        <button class="auth-main-btn" id="authButton" onclick="registerUser()">Создать аккаунт</button>
-        <p class="auth-switch" id="authSwitch"><span id="switchText">Уже есть аккаунт?</span>
-          <button type="button" onclick="switchAuth()" id="switchButton">Войти</button>
-        </p>
-      </div>
-      <div id="userInfo" class="hidden">
-        <div class="user-avatar">👤</div>
-        <h2 id="welcome"></h2>
-        <p class="user-status">● Ты вошёл в WallHub</p>
-        <button class="auth-main-btn" onclick="logoutUser()">Выйти из аккаунта</button>
-      </div>
-    </div>
-  </section>
-</div>
-
-<a class="ad side-ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer">
-  <strong>📢 Ваша реклама</strong><p>Место свободно</p><small>Реклама</small>
-</a>
+<div id="favorites" class="hidden"><section class="section"><h2>❤️ Избранные обои</h2><div class="grid" id="favoriteGrid"></div></section></div>
+<div id="add" class="hidden"><section class="panel"><h2>➕ Добавить свои обои</h2>
+<label>Название</label><input id="newTitle" placeholder="Название обоев"><label>Категория</label>
+<select id="newCategory"><option value="phone">Для телефона</option><option value="pc">Для ПК</option><option value="4k">4K</option><option value="anime">Аниме</option><option value="game">Игры</option></select>
+<label>Изображение</label><input type="file" id="newImage" accept="image/jpeg,image/png,image/webp,image/avif">
+<button onclick="addWallpaper()">Добавить обои</button><p id="addMessage"></p><p>Для загрузки необходимо войти в аккаунт. Максимальный размер файла — 5 МБ.</p>
+</section></div>
+<div id="settings" class="hidden"><section class="panel"><h2>⚙ Настройки WallHub</h2><label>Стиль курсора</label>
+<select id="cursorSelect" onchange="changeCursor(this.value)"><option value="classic">Обычный</option><option value="neon">Неоновый</option><option value="purple">Фиолетовый</option><option value="fire">Огненный</option><option value="matrix">Матрица</option></select></section></div>
+<div id="account" class="hidden"><section class="auth-container"><div class="auth-card">
+<div class="auth-logo">WALLHUB</div><h2 id="authTitle">Создать аккаунт</h2><p class="auth-subtitle">Добро пожаловать в мир обоев!</p>
+<div id="authForm"><div id="credentialsFields">
+<div id="usernameBox"><label for="username">Имя пользователя</label><input id="username" placeholder="Придумай никнейм" maxlength="20" autocomplete="username"></div>
+<label for="email">Email</label><input id="email" type="email" placeholder="Твоя электронная почта" autocomplete="email">
+<label for="password">Пароль</label><div class="password-box"><input id="password" type="password" placeholder="Минимум 8 символов" autocomplete="new-password" oninput="checkPasswordStrength()"><button type="button" onclick="togglePassword('password',this)">Показать</button></div>
+<div id="strengthBox" class="password-strength"><div id="strengthBar"></div></div><div id="strengthText" class="strength-text">Надёжность пароля</div>
+<div id="confirmBox"><label for="confirmPassword">Повтори пароль</label><div class="password-box"><input id="confirmPassword" type="password" placeholder="Повтори пароль" autocomplete="new-password"><button type="button" onclick="togglePassword('confirmPassword',this)">Показать</button></div></div>
+</div><p id="authMessage"></p>
+<p class="auth-subtitle" style="font-size:12px;margin:10px 0">После регистрации мы отправим письмо со ссылкой подтверждения. Открывай её, только если адрес ведёт на официальный сайт WallHub. Не пересылай ссылку другим людям и никому не сообщай пароль.</p>
+<button class="auth-main-btn" id="authButton" onclick="registerUser()">Создать аккаунт</button>
+<p class="auth-switch" id="authSwitch"><span id="switchText">Уже есть аккаунт?</span><button type="button" onclick="switchAuth()" id="switchButton">Войти</button></p></div>
+<div id="userInfo" class="hidden"><div class="user-avatar">👤</div><h2 id="welcome"></h2><p class="user-status">● Ты вошёл в WallHub</p><button class="auth-main-btn" onclick="logoutUser()">Выйти из аккаунта</button></div>
+</div></section></div>
+<a class="ad side-ad" href="https://t.me/QUIX_Support_bot" target="_blank" rel="noopener noreferrer"><strong>📢 Ваша реклама</strong><p>Место свободно</p><small>Реклама</small></a>
 </main>
-
 <footer>WALLHUB © 2026<p>Обои для твоего устройства</p></footer>
-
-<div class="modal" id="imageModal" onclick="closeModal()">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <img id="modalImage" src="" alt="Обои"><p id="modalTitle"></p>
-    <a id="downloadLink" href="#" download="wallhub-wallpaper.jpg"><button>⬇ Скачать обои</button></a>
-    <button onclick="closeModal()">Закрыть</button>
-  </div>
-</div>
-
+<div class="modal" id="imageModal" onclick="closeModal()"><div class="modal-box" onclick="event.stopPropagation()"><img id="modalImage" src="" alt="Обои"><p id="modalTitle"></p><a id="downloadLink" href="#" download="wallhub-wallpaper.jpg"><button>⬇ Скачать обои</button></a><button onclick="closeModal()">Закрыть</button></div></div>
 <script>
-/* ВАЖНО: здесь используются только публичные данные Supabase. */
-const SUPABASE_URL = "https://xypedwtopvlpiiktaldx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_dWN3J2QxHztkvxM6zd_VQA_lO95B4tG";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const defaultWalls = [
+const SUPABASE_URL="https://xypedwtopvlpiiktaldx.supabase.co";
+const SUPABASE_KEY="sb_publishable_dWN3J2QxHztkvxM6zd_VQA_lO95B4tG";
+const SITE_URL="https://ffeda8082-stack.github.io/WallHub1/";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+const defaultWalls=[
 {id:1,title:"Горный пейзаж",category:"pc",popular:true,image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1000"},
 {id:2,title:"Космическая ночь",category:"phone",popular:true,image:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1000"},
 {id:3,title:"Океан",category:"pc",popular:true,image:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1000"},
@@ -231,284 +99,61 @@ const defaultWalls = [
 {id:11,title:"Пейзаж 4K",category:"4k",popular:false,image:"https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1000"},
 {id:12,title:"Игровой стиль",category:"game",popular:true,image:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1000"},
 {id:13,title:"Игровой компьютер",category:"game",popular:false,image:"https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=1000"},
-{id:14,title:"Аниме атмосфера",category:"anime",popular:true,image:"https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1000"}
-];
-
-let walls = [...defaultWalls];
-let favorites = JSON.parse(localStorage.getItem("wh_favorites") || "[]").map(String);
-let currentCategory = "all";
-let authMode = "register";
-
+{id:14,title:"Аниме атмосфера",category:"anime",popular:true,image:"https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1000"}];
+let walls=[...defaultWalls],favorites=JSON.parse(localStorage.getItem("wh_favorites")||"[]").map(String),currentCategory="all",authMode="register";
 function saveFavorites(){localStorage.setItem("wh_favorites",JSON.stringify(favorites))}
-function categoryName(category){
-  const names={phone:"📱 Для телефона",pc:"💻 Для ПК","4k":"✨ 4K",anime:"🎌 Аниме",game:"🎮 Игры"};
-  return names[category]||category;
+function categoryName(c){return({phone:"📱 Для телефона",pc:"💻 Для ПК","4k":"✨ 4K",anime:"🎌 Аниме",game:"🎮 Игры"})[c]||c}
+function createCard(w){
+ const card=document.createElement("div");card.className="wall";const img=document.createElement("img");img.src=w.image;img.alt=w.title;img.loading="lazy";img.onclick=()=>openModal(w);
+ const info=document.createElement("div");info.className="wall-info";const title=document.createElement("h3");title.textContent=w.title;const cat=document.createElement("small");cat.textContent=categoryName(w.category);
+ const actions=document.createElement("div");actions.className="wall-actions";const fav=document.createElement("button");fav.textContent=favorites.includes(String(w.id))?"❤️":"🤍";
+ fav.onclick=()=>{const id=String(w.id);favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];saveFavorites();renderWalls();renderFavorites()};
+ const link=document.createElement("a");link.href=w.image;link.download="wallhub-wallpaper.jpg";link.style.flex="1";const dl=document.createElement("button");dl.textContent="⬇ Скачать";dl.style.width="100%";link.appendChild(dl);
+ actions.append(fav,link);info.append(title,cat,actions);card.append(img,info);return card;
 }
-
-function createCard(wall){
-  const card=document.createElement("div");card.className="wall";
-  const img=document.createElement("img");img.src=wall.image;img.alt=wall.title;img.loading="lazy";img.onclick=()=>openModal(wall);
-  const info=document.createElement("div");info.className="wall-info";
-  const title=document.createElement("h3");title.textContent=wall.title;
-  const category=document.createElement("small");category.textContent=categoryName(wall.category);
-  const actions=document.createElement("div");actions.className="wall-actions";
-  const favorite=document.createElement("button");favorite.textContent=favorites.includes(String(wall.id))?"❤️":"🤍";
-  favorite.onclick=()=>{
-    const id=String(wall.id);
-    favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];
-    saveFavorites();renderWalls();renderFavorites();
-  };
-  const download=document.createElement("a");download.href=wall.image;download.download="wallhub-wallpaper.jpg";download.style.flex="1";
-  const downloadButton=document.createElement("button");downloadButton.textContent="⬇ Скачать";downloadButton.style.width="100%";
-  download.appendChild(downloadButton);actions.append(favorite,download);info.append(title,category,actions);card.append(img,info);
-  return card;
-}
-
-function renderWalls(){
-  const grid=document.getElementById("wallGrid"),popularGrid=document.getElementById("popularGrid");
-  grid.innerHTML="";popularGrid.innerHTML="";
-  const search=document.getElementById("search").value.toLowerCase();
-  walls.forEach(wall=>{
-    const matchesSearch=wall.title.toLowerCase().includes(search);
-    const matchesCategory=currentCategory==="all"||wall.category===currentCategory;
-    if(matchesSearch&&matchesCategory)grid.appendChild(createCard(wall));
-    if(wall.popular&&matchesSearch)popularGrid.appendChild(createCard(wall));
-  });
-  if(!grid.children.length)grid.textContent="Обои не найдены.";
-  if(!popularGrid.children.length)popularGrid.textContent="Пока нет популярных обоев.";
-}
-function renderFavorites(){
-  const grid=document.getElementById("favoriteGrid");grid.innerHTML="";
-  walls.filter(w=>favorites.includes(String(w.id))).forEach(w=>grid.appendChild(createCard(w)));
-  if(!grid.children.length)grid.textContent="Ты ещё не добавил обои в избранное.";
-}
-function setCategory(category,button){
-  currentCategory=category;
-  document.querySelectorAll(".category").forEach(btn=>btn.classList.remove("active"));
-  button.classList.add("active");renderWalls();
-}
-function openModal(wall){
-  document.getElementById("modalImage").src=wall.image;
-  document.getElementById("modalTitle").textContent=wall.title;
-  document.getElementById("downloadLink").href=wall.image;
-  document.getElementById("imageModal").style.display="flex";
-}
+function renderWalls(){const grid=document.getElementById("wallGrid"),popular=document.getElementById("popularGrid");grid.innerHTML="";popular.innerHTML="";const q=document.getElementById("search").value.toLowerCase();
+ walls.forEach(w=>{const match=w.title.toLowerCase().includes(q),cat=currentCategory==="all"||w.category===currentCategory;if(match&&cat)grid.appendChild(createCard(w));if(w.popular&&match)popular.appendChild(createCard(w))});
+ if(!grid.children.length)grid.textContent="Обои не найдены.";if(!popular.children.length)popular.textContent="Пока нет популярных обоев."}
+function renderFavorites(){const g=document.getElementById("favoriteGrid");g.innerHTML="";walls.filter(w=>favorites.includes(String(w.id))).forEach(w=>g.appendChild(createCard(w)));if(!g.children.length)g.textContent="Ты ещё не добавил обои в избранное."}
+function setCategory(c,b){currentCategory=c;document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderWalls()}
+function openModal(w){document.getElementById("modalImage").src=w.image;document.getElementById("modalTitle").textContent=w.title;document.getElementById("downloadLink").href=w.image;document.getElementById("imageModal").style.display="flex"}
 function closeModal(){document.getElementById("imageModal").style.display="none"}
-
-async function loadWalls(){
-  const {data,error}=await supabaseClient.from("wallpapers").select("*").order("created_at",{ascending:false});
-  if(error){console.error("Ошибка загрузки обоев:",error);return}
-  const uploadedWalls=(data||[]).map(item=>{
-    const {data:urlData}=supabaseClient.storage.from("wallpapers").getPublicUrl(item.image_path);
-    return {id:String(item.id),title:item.title,category:item.category,popular:false,image:urlData.publicUrl};
-  });
-  walls=[...defaultWalls,...uploadedWalls];renderWalls();renderFavorites();
-}
-
-async function addWallpaper(){
-  const title=document.getElementById("newTitle").value.trim();
-  const category=document.getElementById("newCategory").value;
-  const file=document.getElementById("newImage").files[0];
-  const message=document.getElementById("addMessage");
-  if(!title||!file){message.textContent="Заполни название и выбери изображение.";return}
-  const allowed=["image/jpeg","image/png","image/webp","image/avif"];
-  if(!allowed.includes(file.type)){message.textContent="Разрешены JPG, PNG, WEBP и AVIF.";return}
-  if(file.size>5*1024*1024){message.textContent="Максимальный размер файла — 5 МБ.";return}
-  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
-  if(userError||!user){message.textContent="Сначала войди в аккаунт.";showSection("account");return}
-  message.textContent="Загружаем обои...";
-  const ext={"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"}[file.type];
-  const path=user.id+"/"+crypto.randomUUID()+"."+ext;
-  try{
-    const {error:uploadError}=await supabaseClient.storage.from("wallpapers").upload(path,file,{contentType:file.type,upsert:false});
-    if(uploadError)throw uploadError;
-    const {error:insertError}=await supabaseClient.from("wallpapers").insert({user_id:user.id,title,category,image_path:path});
-    if(insertError){
-      await supabaseClient.storage.from("wallpapers").remove([path]);
-      throw insertError;
-    }
-    message.textContent="Обои успешно добавлены!";
-    document.getElementById("newTitle").value="";
-    document.getElementById("newImage").value="";
-    await loadWalls();
-  }catch(error){console.error(error);message.textContent="Ошибка загрузки: "+error.message}
-}
-
-function showSection(section){
-  ["home","favorites","add","settings","account"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-  document.getElementById(section).classList.remove("hidden");
-  if(section==="favorites")renderFavorites();
-  if(section==="account")updateAccount();
-}
-function changeCursor(style){
-  const cursors={classic:"default",neon:"crosshair",purple:"pointer",fire:"cell",matrix:"progress"};
-  document.body.style.cursor=cursors[style]||"default";localStorage.setItem("wh_cursor",style);
-}
-const savedCursor=localStorage.getItem("wh_cursor")||"classic";
-document.getElementById("cursorSelect").value=savedCursor;changeCursor(savedCursor);
-
-function setAuthMessage(message,success=false){
-  const element=document.getElementById("authMessage");element.textContent=message;element.classList.toggle("success",success);
-}
-function switchAuth(){
-  document.getElementById("credentialsFields").classList.remove("hidden");
-  document.getElementById("otpBox").classList.add("hidden");
-  document.getElementById("authSwitch").classList.remove("hidden");
-  document.getElementById("authButton").classList.remove("hidden");
-  authMode=authMode==="register"?"login":"register";
-  document.getElementById("authTitle").textContent=authMode==="register"?"Создать аккаунт":"С возвращением!";
-  document.getElementById("authButton").textContent=authMode==="register"?"Создать аккаунт":"Войти";
-  document.getElementById("usernameBox").classList.toggle("hidden",authMode==="login");
-  document.getElementById("confirmBox").classList.toggle("hidden",authMode==="login");
-  document.getElementById("strengthBox").classList.toggle("hidden",authMode==="login");
-  document.getElementById("strengthText").classList.toggle("hidden",authMode==="login");
-  document.getElementById("password").autocomplete=authMode==="login"?"current-password":"new-password";
-  document.getElementById("switchText").textContent=authMode==="register"?"Уже есть аккаунт?":"Нет аккаунта?";
-  document.getElementById("switchButton").textContent=authMode==="register"?"Войти":"Регистрация";
-  document.getElementById("authButton").onclick=authMode==="register"?registerUser:loginUser;
-  setAuthMessage("");
-}
-function togglePassword(id,button){
-  const input=document.getElementById(id);input.type=input.type==="password"?"text":"password";
-  button.textContent=input.type==="password"?"Показать":"Скрыть";
-}
-function checkPasswordStrength(){
-  const password=document.getElementById("password").value,bar=document.getElementById("strengthBar"),text=document.getElementById("strengthText");
-  let score=0;
-  if(password.length>=8)score++;if(/[A-ZА-Я]/.test(password))score++;if(/[a-zа-я]/.test(password))score++;if(/[0-9]/.test(password))score++;if(/[^a-zA-Zа-яА-Я0-9]/.test(password))score++;
-  const widths=["0%","20%","40%","60%","80%","100%"];
-  const labels=["Надёжность пароля","Очень слабый","Слабый","Средний","Хороший","Сильный"];
-  bar.style.width=widths[score];text.textContent=labels[score];
-}
-
-function showOtpStep(message){
-  document.getElementById("credentialsFields").classList.add("hidden");
-  document.getElementById("otpBox").classList.remove("hidden");
-  document.getElementById("authSwitch").classList.add("hidden");
-  document.getElementById("authButton").classList.add("hidden");
-  document.getElementById("otpMessage").textContent=message||"";
-  document.getElementById("emailCode").value="";
-}
-async function registerUser(){
-  const username=document.getElementById("username").value.trim();
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value;
-  const confirm=document.getElementById("confirmPassword").value;
-  if(!/^[a-zA-Z0-9_а-яА-ЯёЁ]{3,20}$/.test(username)){setAuthMessage("Ник должен содержать 3–20 букв, цифр или _.");return}
-  if(!email||!email.includes("@")){setAuthMessage("Введи правильную электронную почту.");return}
-  if(password.length<8){setAuthMessage("Пароль должен содержать минимум 8 символов.");return}
-  if(password!==confirm){setAuthMessage("Пароли не совпадают.");return}
-  const button=document.getElementById("authButton");button.disabled=true;button.textContent="Создаём аккаунт...";
-  try{
-    const {data,error}=await supabaseClient.auth.signUp({
-      email,
-      password,
-      options:{data:{username}}
-    });
-    if(error)throw error;
-    if(data.session){
-      setAuthMessage("Аккаунт создан! Ты уже вошёл.",true);
-      await updateAccount(data.user);
-    }else{
-      document.getElementById("password").value="";
-      document.getElementById("confirmPassword").value="";
-      showOtpStep("Код отправлен на "+email+". Проверь входящие и папку «Спам».");
-    }
-  }catch(error){setAuthMessage(error.message||"Не удалось создать аккаунт")}
-  finally{button.disabled=false;button.textContent="Создать аккаунт"}
-}
-async function verifyEmailCode(){
-  const email=document.getElementById("email").value.trim();
-  const token=document.getElementById("emailCode").value.trim();
-  const message=document.getElementById("otpMessage");
-  if(!/^[0-9]{6}$/.test(token)){message.textContent="Введи все 6 цифр из письма.";return}
-  message.textContent="Проверяем код...";
-  try{
-    const {data,error}=await supabaseClient.auth.verifyOtp({email,token,type:"signup"});
-    if(error)throw error;
-    message.textContent="Почта подтверждена!";
-    await updateAccount(data.user);
-  }catch(error){message.textContent=error.message||"Не удалось подтвердить код."}
-}
-async function resendEmailCode(){
-  const email=document.getElementById("email").value.trim();
-  const message=document.getElementById("otpMessage");
-  message.textContent="Отправляем новый код...";
-  try{
-    const {error}=await supabaseClient.auth.resend({type:"signup",email});
-    if(error)throw error;
-    message.textContent="Новый код отправлен. Проверь почту.";
-  }catch(error){message.textContent=error.message||"Не удалось отправить код."}
-}
-async function loginUser(){
-  const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
-  const button=document.getElementById("authButton");button.disabled=true;button.textContent="Входим...";
-  try{
-    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
-    if(error)throw error;
-    document.getElementById("password").value="";updateAccount(data.user);
-  }catch(error){setAuthMessage(error.message||"Ошибка входа")}
-  finally{button.disabled=false;button.textContent="Войти"}
-}
-async function logoutUser(){
-  document.getElementById("credentialsFields").classList.remove("hidden");
-  document.getElementById("otpBox").classList.add("hidden");
-  document.getElementById("authSwitch").classList.remove("hidden");
-  document.getElementById("authButton").classList.remove("hidden");
-  const {error}=await supabaseClient.auth.signOut();
-  if(error){setAuthMessage(error.message);return}
-  document.getElementById("email").value="";
-  document.getElementById("username").value="";
-  document.getElementById("password").value="";
-  document.getElementById("confirmPassword").value="";
-  authMode="register";
-  document.getElementById("authTitle").textContent="Создать аккаунт";
-  document.getElementById("authButton").textContent="Создать аккаунт";
-  document.getElementById("authButton").onclick=registerUser;
-  document.getElementById("usernameBox").classList.remove("hidden");
-  document.getElementById("confirmBox").classList.remove("hidden");
-  document.getElementById("strengthBox").classList.remove("hidden");
-  document.getElementById("strengthText").classList.remove("hidden");
-  document.getElementById("switchText").textContent="Уже есть аккаунт?";
-  document.getElementById("switchButton").textContent="Войти";
-  await updateAccount(null);
-}
-async function updateAccount(user){
-  if(user===undefined){
-    const {data,error}=await supabaseClient.auth.getUser();
-    user=error?null:data.user;
-  }
-  document.getElementById("authForm").classList.toggle("hidden",!!user);
-  document.getElementById("userInfo").classList.toggle("hidden",!user);
-  if(user){
-    const username=user.user_metadata?.username||user.email;
-    document.getElementById("welcome").textContent="Привет, "+username+"!";
-  }
-}
-
-supabaseClient.auth.onAuthStateChange((event,session)=>{
-  const user=session?.user||null;
-  document.getElementById("authForm").classList.toggle("hidden",!!user);
-  document.getElementById("userInfo").classList.toggle("hidden",!user);
-  if(user){
-    const username=user.user_metadata?.username||user.email;
-    document.getElementById("welcome").textContent="Привет, "+username+"!";
-    if(event==="SIGNED_IN"){
-      showSection("account");
-      setAuthMessage("Почта подтверждена! Ты автоматически вошёл в WallHub.",true);
-    }
-  }
-});
-
-async function startWallHub(){
-  renderWalls();renderFavorites();
-  await loadWalls();
-  await updateAccount();
-}
+async function loadWalls(){const{data,error}=await supabaseClient.from("wallpapers").select("*").order("created_at",{ascending:false});if(error){console.error(error);return}
+ const uploaded=(data||[]).map(x=>{const{data:u}=supabaseClient.storage.from("wallpapers").getPublicUrl(x.image_path);return{id:String(x.id),title:x.title,category:x.category,popular:false,image:u.publicUrl}});
+ walls=[...defaultWalls,...uploaded];renderWalls();renderFavorites()}
+async function addWallpaper(){const title=document.getElementById("newTitle").value.trim(),category=document.getElementById("newCategory").value,file=document.getElementById("newImage").files[0],msg=document.getElementById("addMessage");
+ if(!title||!file){msg.textContent="Заполни название и выбери изображение.";return}if(!["image/jpeg","image/png","image/webp","image/avif"].includes(file.type)){msg.textContent="Разрешены JPG, PNG, WEBP и AVIF.";return}if(file.size>5*1024*1024){msg.textContent="Максимальный размер файла — 5 МБ.";return}
+ const{data:{user},error:userErr}=await supabaseClient.auth.getUser();if(userErr||!user){msg.textContent="Сначала войди в аккаунт.";showSection("account");return}
+ msg.textContent="Загружаем обои...";const ext={"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"}[file.type],path=user.id+"/"+crypto.randomUUID()+"."+ext;
+ try{const{error:upErr}=await supabaseClient.storage.from("wallpapers").upload(path,file,{contentType:file.type,upsert:false});if(upErr)throw upErr;
+ const{error:dbErr}=await supabaseClient.from("wallpapers").insert({user_id:user.id,title,category,image_path:path});if(dbErr){await supabaseClient.storage.from("wallpapers").remove([path]);throw dbErr}
+ msg.textContent="Обои успешно добавлены!";document.getElementById("newTitle").value="";document.getElementById("newImage").value="";await loadWalls()}catch(e){console.error(e);msg.textContent="Ошибка загрузки: "+e.message}}
+function showSection(s){["home","favorites","add","settings","account"].forEach(x=>document.getElementById(x).classList.add("hidden"));document.getElementById(s).classList.remove("hidden");if(s==="favorites")renderFavorites();if(s==="account")updateAccount()}
+function changeCursor(s){const c={classic:"default",neon:"crosshair",purple:"pointer",fire:"cell",matrix:"progress"};document.body.style.cursor=c[s]||"default";localStorage.setItem("wh_cursor",s)}
+const savedCursor=localStorage.getItem("wh_cursor")||"classic";document.getElementById("cursorSelect").value=savedCursor;changeCursor(savedCursor);
+function setAuthMessage(m,ok=false){const e=document.getElementById("authMessage");e.textContent=m;e.classList.toggle("success",ok)}
+function switchAuth(){authMode=authMode==="register"?"login":"register";document.getElementById("authTitle").textContent=authMode==="register"?"Создать аккаунт":"С возвращением!";
+ document.getElementById("authButton").textContent=authMode==="register"?"Создать аккаунт":"Войти";document.getElementById("usernameBox").classList.toggle("hidden",authMode==="login");
+ document.getElementById("confirmBox").classList.toggle("hidden",authMode==="login");document.getElementById("strengthBox").classList.toggle("hidden",authMode==="login");document.getElementById("strengthText").classList.toggle("hidden",authMode==="login");
+ document.getElementById("password").autocomplete=authMode==="login"?"current-password":"new-password";document.getElementById("switchText").textContent=authMode==="register"?"Уже есть аккаунт?":"Нет аккаунта?";
+ document.getElementById("switchButton").textContent=authMode==="register"?"Войти":"Регистрация";document.getElementById("authButton").onclick=authMode==="register"?registerUser:loginUser;setAuthMessage("")}
+function togglePassword(id,b){const e=document.getElementById(id);e.type=e.type==="password"?"text":"password";b.textContent=e.type==="password"?"Показать":"Скрыть"}
+function checkPasswordStrength(){const p=document.getElementById("password").value,b=document.getElementById("strengthBar"),t=document.getElementById("strengthText");let s=0;if(p.length>=8)s++;if(/[A-ZА-Я]/.test(p))s++;if(/[a-zа-я]/.test(p))s++;if(/[0-9]/.test(p))s++;if(/[^a-zA-Zа-яА-Я0-9]/.test(p))s++;b.style.width=["0%","20%","40%","60%","80%","100%"][s];t.textContent=["Надёжность пароля","Очень слабый","Слабый","Средний","Хороший","Сильный"][s]}
+async function registerUser(){const username=document.getElementById("username").value.trim(),email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,confirm=document.getElementById("confirmPassword").value;
+ if(!/^[a-zA-Z0-9_а-яА-ЯёЁ]{3,20}$/.test(username)){setAuthMessage("Ник должен содержать 3–20 букв, цифр или _.");return}if(!email||!email.includes("@")){setAuthMessage("Введи правильную электронную почту.");return}if(password.length<8){setAuthMessage("Пароль должен содержать минимум 8 символов.");return}if(password!==confirm){setAuthMessage("Пароли не совпадают.");return}
+ const b=document.getElementById("authButton");b.disabled=true;b.textContent="Создаём аккаунт...";
+ try{const{data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{username},emailRedirectTo:SITE_URL}});if(error)throw error;
+ if(data.session){await updateAccount(data.user);setAuthMessage("Аккаунт создан! Ты уже вошёл.",true)}else{document.getElementById("password").value="";document.getElementById("confirmPassword").value="";setAuthMessage("Письмо отправлено на "+email+". Открой ссылку подтверждения — она вернёт тебя на WallHub. Не пересылай ссылку другим людям.",true)}
+ }catch(e){setAuthMessage(e.message||"Не удалось создать аккаунт")}finally{b.disabled=false;b.textContent=authMode==="register"?"Создать аккаунт":"Войти"}}
+async function loginUser(){const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,b=document.getElementById("authButton");b.disabled=true;b.textContent="Входим...";
+ try{const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;document.getElementById("password").value="";await updateAccount(data.user);showSection("account")}catch(e){setAuthMessage(e.message||"Ошибка входа")}finally{b.disabled=false;b.textContent="Войти"}}
+async function logoutUser(){const{error}=await supabaseClient.auth.signOut();if(error){setAuthMessage(error.message);return}document.getElementById("email").value="";document.getElementById("username").value="";document.getElementById("password").value="";document.getElementById("confirmPassword").value="";
+ authMode="register";document.getElementById("authTitle").textContent="Создать аккаунт";document.getElementById("authButton").textContent="Создать аккаунт";document.getElementById("authButton").onclick=registerUser;
+ ["usernameBox","confirmBox","strengthBox","strengthText"].forEach(id=>document.getElementById(id).classList.remove("hidden"));document.getElementById("switchText").textContent="Уже есть аккаунт?";document.getElementById("switchButton").textContent="Войти";await updateAccount(null);setAuthMessage("")}
+async function updateAccount(user){if(user===undefined){const{data,error}=await supabaseClient.auth.getUser();user=error?null:data.user}document.getElementById("authForm").classList.toggle("hidden",!!user);document.getElementById("userInfo").classList.toggle("hidden",!user);if(user)document.getElementById("welcome").textContent="Привет, "+(user.user_metadata?.username||user.email)+"!"}
+supabaseClient.auth.onAuthStateChange((event,session)=>{const user=session?.user||null;document.getElementById("authForm").classList.toggle("hidden",!!user);document.getElementById("userInfo").classList.toggle("hidden",!user);if(user){document.getElementById("welcome").textContent="Привет, "+(user.user_metadata?.username||user.email)+"!";if(event==="SIGNED_IN")showSection("account")}});
+async function startWallHub(){renderWalls();renderFavorites();const{error}=await supabaseClient.auth.getSession();if(error)console.error(error);await loadWalls();await updateAccount();const p=new URLSearchParams(location.search);if(p.has("error_description"))setAuthMessage("Не удалось подтвердить почту: "+p.get("error_description"))}
 startWallHub();
 </script>
 </body>
 </html>
-
-
-
